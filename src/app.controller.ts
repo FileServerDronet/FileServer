@@ -35,7 +35,7 @@ export class AppController {
   @Get("/getFile")
   getFile(@Res() res : Response , @Body() file : FileParams)
   {
-    res.sendFile(path.join(__dirname , "../uploads/" + file.fileName));
+    res.sendFile(path.join(__dirname , "./uploads/" + file.fileName));
   }
 
 
