@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const path = require("path");
+const fs = require("fs");
 let AppController = class AppController {
     getHello() {
         return "Hello World";
@@ -26,7 +27,23 @@ let AppController = class AppController {
         return "success";
     }
     getFile(res, file) {
-        res.sendFile(path.join(__dirname, "../uploads/" + file.fileName));
+        res.sendFile(path.join(__dirname, "./uploads/" + file.fileName));
+    }
+    async deleteFile(res, file) {
+        try {
+            const filePath = path.join(__dirname, "./uploads/" + file.fileName);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                return res.status(200).json({ message: "Dosya başarıyla silindi." });
+            }
+            else {
+                return res.status(404).json({ message: "Dosya bulunamadı." });
+            }
+        }
+        catch (error) {
+            console.error("Dosya silinirken hata oluştu:", error);
+            return res.status(500).json({ message: "Dosya silinirken bir hata oluştu." });
+        }
     }
 };
 exports.AppController = AppController;
@@ -59,6 +76,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getFile", null);
+__decorate([
+    (0, common_1.Delete)("/deleteFile"),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "deleteFile", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)()
 ], AppController);
