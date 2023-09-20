@@ -9,4 +9,4 @@ import { Script } from 'vm';
   ]
 })
 export class AppModule {}
-Script
+
