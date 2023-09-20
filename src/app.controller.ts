@@ -44,15 +44,19 @@ export class AppController {
   async deleteFile(@Res() res: Response, @Body() file: FileParams) {
     try {
       const filePath = path.join(__dirname, "./uploads/" + file.fileName);
-  
+
+      console.log("Dosya Yolu:", filePath); // Dosya yolunu konsola yazdır
+
       // Dosya varsa sil
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
         return res.status(200).json({ message: "Dosya başarıyla silindi." });
       } else {
+        console.log("Dosya Bulunamadı"); // Dosyanın bulunamadığını konsola yazdır
         return res.status(404).json({ message: "Dosya bulunamadı." });
       }
     } catch (error) {
+      
       console.error("Dosya silinirken hata oluştu:", error);
       return res.status(500).json({ message: "Dosya silinirken bir hata oluştu." });
     }

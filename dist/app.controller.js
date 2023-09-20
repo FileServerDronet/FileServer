@@ -32,11 +32,13 @@ let AppController = class AppController {
     async deleteFile(res, file) {
         try {
             const filePath = path.join(__dirname, "./uploads/" + file.fileName);
+            console.log("Dosya Yolu:", filePath);
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
                 return res.status(200).json({ message: "Dosya başarıyla silindi." });
             }
             else {
+                console.log("Dosya Bulunamadı");
                 return res.status(404).json({ message: "Dosya bulunamadı." });
             }
         }
