@@ -44,6 +44,8 @@ export class AppController {
 
       // Dosya varsa sil
       if (fs.existsSync(filePath)) {
+        console.log("Dosya Yolu:", filePath);
+
         fs.unlinkSync(filePath);
         return res.status(200).json({ message: "Dosya başarıyla silindi." });
       } else {
@@ -51,7 +53,9 @@ export class AppController {
       }
     } catch (error) {
       console.error("Dosya silinirken hata oluştu:", error);
+      
       return res.status(500).json({ message: "Dosya silinirken bir hata oluştu." });
+      
     }
   }
 }

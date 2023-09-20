@@ -26,25 +26,19 @@ let AppController = class AppController {
         console.log(file);
         return "success";
     }
-    getFile(res, file) {
-        res.sendFile(path.join(__dirname, "./uploads/" + file.fileName));
+    getFile(res, fileName) {
+        const filePath = path.join(__dirname, "./uploads/", fileName);
+        res.sendFile(filePath);
     }
-    async deleteFile(res, file) {
+    async deleteFile(res, fileName) {
         try {
-            const filePath = path.join(__dirname, "./uploads/" + file.fileName);
-<<<<<<< Updated upstream
-            console.log("Dosya Yolu:", filePath);
-=======
->>>>>>> Stashed changes
+            const filePath = path.join(__dirname, "./uploads/", fileName);
             if (fs.existsSync(filePath)) {
+                console.log("Dosya Yolu:", filePath);
                 fs.unlinkSync(filePath);
                 return res.status(200).json({ message: "Dosya başarıyla silindi." });
             }
             else {
-<<<<<<< Updated upstream
-                console.log("Dosya Bulunamadı");
-=======
->>>>>>> Stashed changes
                 return res.status(404).json({ message: "Dosya bulunamadı." });
             }
         }
@@ -79,17 +73,17 @@ __decorate([
 __decorate([
     (0, common_1.Get)("/getFile"),
     __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)('fileName')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getFile", null);
 __decorate([
     (0, common_1.Delete)("/deleteFile"),
     __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)('fileName')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "deleteFile", null);
 exports.AppController = AppController = __decorate([
