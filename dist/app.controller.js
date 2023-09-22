@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const path = require("path");
-const fs = require("fs");
+const uuid_1 = require("uuid");
 let AppController = class AppController {
     getHello() {
         return "Hello World";
@@ -26,26 +26,8 @@ let AppController = class AppController {
         console.log(file);
         return "success";
     }
-    getFile(res, fileName) {
-        const filePath = path.join(__dirname, "./uploads/", fileName);
-        res.sendFile(filePath);
-    }
-    async deleteFile(res, fileName) {
-        try {
-            const filePath = path.join(__dirname, "./uploads/", fileName);
-            if (fs.existsSync(filePath)) {
-                console.log("Dosya Yolu:", filePath);
-                fs.unlinkSync(filePath);
-                return res.status(200).json({ message: "Dosya başarıyla silindi." });
-            }
-            else {
-                return res.status(404).json({ message: "Dosya bulunamadı." });
-            }
-        }
-        catch (error) {
-            console.error("Dosya silinirken hata oluştu:", error);
-            return res.status(500).json({ message: "Dosya silinirken bir hata oluştu." });
-        }
+    getFile(res, file) {
+        res.sendFile(path.join(__dirname, "../uploads/" + file.fileName));
     }
 };
 exports.AppController = AppController;
@@ -61,7 +43,10 @@ __decorate([
         storage: (0, multer_1.diskStorage)({
             destination: "./uploads",
             filename: (req, file, cb) => {
-                cb(null, `${file.originalname}`);
+                const uniqueId = (0, uuid_1.v4)();
+                const fileExtension = path.extname(file.originalname);
+                const newFileName = `${uniqueId}${fileExtension}`;
+                cb(null, newFileName);
             }
         })
     })),
@@ -73,19 +58,11 @@ __decorate([
 __decorate([
     (0, common_1.Get)("/getFile"),
     __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Query)('fileName')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getFile", null);
-__decorate([
-    (0, common_1.Delete)("/deleteFile"),
-    __param(0, (0, common_1.Res)()),
-    __param(1, (0, common_1.Query)('fileName')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], AppController.prototype, "deleteFile", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)()
 ], AppController);
